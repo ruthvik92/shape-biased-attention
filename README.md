@@ -2,6 +2,42 @@
 Little experiment to modify the attention mechanism to make it more shape biased. 
 
 # Some discussion about the hypothesis 
+## Code
+```
+def compute_shape_bias_penalty(patch_positions, patch_embeddings, alpha=1.0, dist_scale=1.0):
+    # patch_positions, patch_embeddings are now on GPU already if you called .to(device)
+
+    # Possibly convert alpha and dist_scale to Tensors on the same device
+    alpha_tensor = torch.tensor(alpha, device=patch_positions.device, dtype=patch_embeddings.dtype)
+    dist_scale_tensor = torch.tensor(dist_scale, device=patch_positions.device, dtype=patch_embeddings.dtype)
+
+    # (1) Correlation computation...
+    #print(patch_embeddings.device)
+    norms = patch_embeddings.norm(dim=1, keepdim=True) + 1e-6
+    normalized = patch_embeddings / norms
+    corr_matrix = normalized @ normalized.T   # GPU if patch_embeddings is on GPU
+
+    # (2) Distances
+    row_diff = patch_positions[:, 0].unsqueeze(1) - patch_positions[:, 0].unsqueeze(0)  # still on GPU
+    col_diff = patch_positions[:, 1].unsqueeze(1) - patch_positions[:, 1].unsqueeze(0)  # still on GPU
+    dist_matrix = torch.sqrt(row_diff**2 + col_diff**2)  # GPU
+
+    dist_weight = 1.0 / (1.0 + dist_matrix * dist_scale_tensor)  # GPU
+
+    # (3) Combine
+    #print(corr_matrix.device)
+    #print(alpha_tensor.device) 
+    #print(dist_weight.device)
+    penalty = alpha_tensor * corr_matrix * dist_weight   # GPU
+
+    # (4) Diagonal = 0
+    N = patch_positions.shape[0]
+    diag_idx = torch.arange(N, device=patch_positions.device)
+    penalty[diag_idx, diag_idx] = 0.0
+
+    return penalty
+```
+## Discussing the idea further
 
 * Image size:(32, 32), Patch_size:8, Patch_grid_size:(4, 4)
 
