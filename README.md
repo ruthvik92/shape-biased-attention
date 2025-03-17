@@ -143,5 +143,7 @@ tensor([[0, 0],
 *  We have 16 patches and assuming $d\_model \in R^{512}$, we have features in $R^{16 \times 512}$. Correlation is calculated as $R^{16 \times 512} \times R^{512 \times 16} \in R^{16x16} $. Let this matrix be `corr_matrix`.
 * First row in `corr_matrix` tells you how correlated each a patch is w.r.t the first patch.
 *  Operation `corr_matrix * dist_weight` will scale the correlation values inversely proportional to the distance from the patch.
+*  This will enable penalizing attention values for patches that are not only correlated but also closeby in proximity.
+*  Imagine  a picture of cat, `16x16` is a patch size, we would like to penalize the attention for patches if they're are all attending to the similar texture (e.g., Cat's fur). If two `16x16` blocks that are next to each other within the cat's fur, we would like to reduce the attention between these two patches because it "might" encourage texture learning. Air quotes because, I am not sure yet!!   
 *  Note that we typically zero out the diagonal entries of `penalty` to prevent unnecessarily penalizing the self attention for each patch. 
                
