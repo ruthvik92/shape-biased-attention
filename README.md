@@ -1,6 +1,8 @@
 # shape-biased-attention
 Little experiment to modify the attention mechanism to make it more shape biased. 
 
+* Many of the references in the repo [ECE-697-Fall-2022](https://github.com/ruthvik92/ECE-697-Fall-2022) apply here also.
+
 # Some discussion about the hypothesis 
 ## Code
 ```
