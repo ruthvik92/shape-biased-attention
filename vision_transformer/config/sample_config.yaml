@@ -1,0 +1,25 @@
+MODEL:
+  PRE_TRAINED_HUBERT_BASE : "facebook/hubert-base-ls960"
+  NUM_LABELS : 6
+  LOAD_EXISTING_CKPT : False
+  EXISTING_CKPT_PATH : " "
+  NUM_CHARS_TO_SKIP : 7
+  UNFREEZE_LAST_N_LAYERS : 10
+  CHECKPOINT_DIR: "../runs"
+# Each of the 11 `HubertEncoderLayer` 16 layers inside, -10 indicates
+# that we will be training all the layers except the first.
+# See the following notebook for the extra input layers that this model has
+# /notebooks/speech_sentiment_classification/
+# btown-speech-emotion-recognition/notebooks/trainer_testing.ipynb
+
+DATASET:
+  ROOT_DIR : " "
+  LABEL_DICT : {"ANG": 0, "DIS": 1, "FEA": 2, "HAP": 3, "NEU": 4, "SAD": 5}
+
+SOLVER:
+  EPOCHS : 30
+  BASE_LR : 2e-5
+  WARMUP_STEPS : 100
+  BATCH_SIZE : 18
+
+  

@@ -1,0 +1,30 @@
+MODEL:
+  PRE_TRAINED_HUBERT_BASE : "facebook/hubert-base-ls960"
+  NUM_LABELS : 6
+  LOAD_EXISTING_CKPT : True
+  EXISTING_CKPT_PATH : "/home/ruthvik/speech_sentiment_classification/\
+  btown-speech-emotion-recognition/btown_ser/runs/fast-firefly-9/FineTuningModel_epoch7.pt"
+  NUM_CHARS_TO_SKIP : 7
+  UNFREEZE_LAST_N_LAYERS : 10
+# Each of the 11 `HubertEncoderLayer` 16 layers inside, -10 indicates
+# that we will be training all the layers except the first.
+# See the following notebook for the extra input layers that this model has
+# /notebooks/speech_sentiment_classification/
+# btown-speech-emotion-recognition/notebooks/trainer_testing.ipynb
+
+DATASET:
+  ROOT_DIR : "/home/ruthvik/speech_sentiment_classification/speech-emotion/cache_crema/\
+  downloads/extracted/bce0b52694cd7bd33785d8c3a052e940072ab6f3f29a8ce9151a2f326090bfa4/AudioWAV"
+  LABEL_DICT : {"ANG": 0, "DIS": 1, "FEA": 2, "HAP": 3, "NEU": 4, "SAD": 5}
+
+SOLVER:
+  EPOCHS : 30
+  BASE_LR : 2e-5
+  WARMUP_STEPS : 100
+  BATCH_SIZE : 18
+
+INFERENCE:
+  CHECKPOINT : "/home/ruthvik/speech_sentiment_classification/\
+  btown-speech-emotion-recognition/btown_ser/runs/fast-firefly-9/FineTuningModel_epoch7.pt"
+  INPUT_DATA : "/home/ruthvik/speech_sentiment_classification/data/Sentiment_classification_boomtown/Sentiment Classification/batch_02_downsampled" 
+  
