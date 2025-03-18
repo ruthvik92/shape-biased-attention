@@ -139,6 +139,7 @@ tensor([[0, 0],
       [0.22 0.24 0.25 0.24 0.26 0.31 0.33 0.31 0.31 0.41 0.5  0.41 0.33 0.5 1.   0.5 ]
       [0.19 0.22 0.24 0.25 0.22 0.26 0.31 0.33 0.24 0.31 0.41 0.5  0.25 0.33 0.5  1.  ]]
 
+* $A = \mathrm{Softmax}\!\Bigl(\frac{Q K^\top}{\sqrt{d\_k}} \;-\; \mathrm{penalty}\Bigr)$
 
 * `penalty = alpha_tensor * corr_matrix * dist_weight`
 *  $corr\_matrix \in R^{16\times16}$ why ?
