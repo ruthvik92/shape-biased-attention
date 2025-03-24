@@ -156,6 +156,7 @@ tensor([[0, 0],
 * `alpha=0` was trained for 20 epochs with batch size of `128` (`imagent_shape_biased_net_4extra_conv_adam_lr_0.0003_alpha_0.0_20_epochs_randaugs_128_batch.pth`)
 * `alpha=1` was trained for 19 epochs with batch size of `256` (`imagent_shape_biased_net_4extra_conv_sgd_lr_0.0005_gamma_0.75_alpha_1.0_10_epochs_randaugs_128_batch`)
 ![Prelimnary Results](alpha0_v_alpha1.png)
+![Prelimnary Results](alpha0_v_alpha1_alpha_1_and_pt5.png)
 
 
                
