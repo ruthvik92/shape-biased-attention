@@ -149,4 +149,13 @@ tensor([[0, 0],
 *  This will enable penalizing attention values for patches that are not only correlated but also closeby in proximity.
 *  Imagine  a picture of cat, `16x16` is a patch size, we would like to penalize the attention for patches if they're are all attending to the similar texture (e.g., Cat's fur). If two `16x16` blocks that are next to each other within the cat's fur, we would like to reduce the attention between these two patches because it "might" encourage texture learning. Air quotes because, I am not sure yet!!   
 *  Note that we typically zero out the diagonal entries of `penalty` to prevent unnecessarily penalizing the self attention for each patch. 
+
+# Prelimnary results:
+* Turns out that this penalty introduces texture bias as opposed to the intended shape bias!!!
+* Both models were trained to achieve approximately equal val imagnet accuracy and then tested for various biases using the `model-v-human`. 
+* `alpha=0` was trained for 20 epochs with batch size of `128` (`imagent_shape_biased_net_4extra_conv_adam_lr_0.0003_alpha_0.0_20_epochs_randaugs_128_batch.pth`)
+* `alpha=1` was trained for 19 epochs with batch size of `256` (`imagent_shape_biased_net_4extra_conv_sgd_lr_0.0005_gamma_0.75_alpha_1.0_10_epochs_randaugs_128_batch`)
+![Prelimnary Results](alpha0_v_alpha1.png)
+
+
                
