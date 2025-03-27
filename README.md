@@ -165,8 +165,8 @@ tensor([[0, 0],
 * Both models were trained to achieve approximately equal val imagnet accuracy and then tested for various biases using the `model-v-human`. 
 * `alpha=0` was trained for 20 epochs with batch size of `128` (`imagent_shape_biased_net_4extra_conv_adam_lr_0.0003_alpha_0.0_20_epochs_randaugs_128_batch.pth`)
 * `alpha=1` was trained for 19 epochs with batch size of `256` (`imagent_shape_biased_net_4extra_conv_sgd_lr_0.0005_gamma_0.75_alpha_1.0_10_epochs_randaugs_128_batch`)
-![Prelimnary Results](alpha0_v_alpha1.png)
 ![Prelimnary Results](alpha0_v_alpha1_alpha_1_and_pt5.png)
+* It is not all doom and gloom, I trained a model with `alpha=1.0` for a while and then I reduced it to `0.5` for just 2 epochs ( I ran out of patience). Notice the rows `edge`, `silhoutte`, `contrast`, . (`imagent_shape_biased_net_4extra_conv_adam_lr_0.0003_alpha_0.5_2epochs_alpha_1.0_20_epochs_randaugs_128_256_batch.pth`)
 
 
                
