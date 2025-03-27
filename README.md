@@ -37,6 +37,15 @@ def compute_shape_bias_penalty(patch_positions, patch_embeddings, alpha=1.0, dis
     diag_idx = torch.arange(N, device=patch_positions.device)
     penalty[diag_idx, diag_idx] = 0.0
 
+    # (5) Create a local window mask: window_size=5 => half_window=2
+    # half_w = (window_size - 1) // 2  # e.g. 5->2, 3->1
+    # local_window_mask = (
+    #     (row_diff.abs() <= half_w) & 
+    #     (col_diff.abs() <= half_w)
+    # )  # (N,N), True if within ±2 in row & col
+    # OR just a circular distance
+    local_window_mask = (dist_matrix <= limit_penalty_radius_to)
+
     return penalty
 ```
 ## Discussing the idea further
@@ -149,6 +158,7 @@ tensor([[0, 0],
 *  This will enable penalizing attention values for patches that are not only correlated but also closeby in proximity.
 *  Imagine  a picture of cat, `16x16` is a patch size, we would like to penalize the attention for patches if they're are all attending to the similar texture (e.g., Cat's fur). If two `16x16` blocks that are next to each other within the cat's fur, we would like to reduce the attention between these two patches because it "might" encourage texture learning. Air quotes because, I am not sure yet!!   
 *  Note that we typically zero out the diagonal entries of `penalty` to prevent unnecessarily penalizing the self attention for each patch. 
+* 03/27/2025: Because the prelimnary results sucked so I added another factor `local_window_mask` to limit the penalty to a few patches in the neighborhood. Intuition says that texture is a local feature so limiting the attenetion inhibition to a few patches should be enough.  
 
 # Prelimnary results:
 * Turns out that this penalty introduces texture bias as opposed to the intended shape bias!!!
