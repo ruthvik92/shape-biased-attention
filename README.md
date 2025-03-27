@@ -159,6 +159,7 @@ tensor([[0, 0],
 *  Imagine  a picture of cat, `16x16` is a patch size, we would like to penalize the attention for patches if they're are all attending to the similar texture (e.g., Cat's fur). If two `16x16` blocks that are next to each other within the cat's fur, we would like to reduce the attention between these two patches because it "might" encourage texture learning. Air quotes because, I am not sure yet!!   
 *  Note that we typically zero out the diagonal entries of `penalty` to prevent unnecessarily penalizing the self attention for each patch. 
 * 03/27/2025: Because the prelimnary results sucked so I added another factor `local_window_mask` to limit the penalty to a few patches in the neighborhood. Intuition says that texture is a local feature so limiting the attenetion inhibition to a few patches should be enough.  
+* Another idea is to have a parallel path of a netowork that is exact replica of PatchEmbeddings layer but with fixed weights that are set to `1.0`. This layer simply projects input image into the size $Batches \times No.Of Patches \times d\_model $ (`B X n_patches X d_model`). This layer could preserve the image pixel information and relative pixel values more accurately as opposed to trained `PatchEmbedding` layer whose weights are randomly initialized. 
 
 # Prelimnary results:
 * Turns out that this penalty introduces texture bias as opposed to the intended shape bias!!!
@@ -166,7 +167,7 @@ tensor([[0, 0],
 * `alpha=0` was trained for 20 epochs with batch size of `128` (`imagent_shape_biased_net_4extra_conv_adam_lr_0.0003_alpha_0.0_20_epochs_randaugs_128_batch.pth`)
 * `alpha=1` was trained for 19 epochs with batch size of `256` (`imagent_shape_biased_net_4extra_conv_sgd_lr_0.0005_gamma_0.75_alpha_1.0_10_epochs_randaugs_128_batch`)
 ![Prelimnary Results](alpha0_v_alpha1_alpha_1_and_pt5.png)
-* It is not all doom and gloom, I trained a model with `alpha=1.0` for a while and then I reduced it to `0.5` for just 2 epochs ( I ran out of patience). Notice the rows `edge`, `silhoutte`, `contrast`, . (`imagent_shape_biased_net_4extra_conv_adam_lr_0.0003_alpha_0.5_2epochs_alpha_1.0_20_epochs_randaugs_128_256_batch.pth`)
+* **It is not all doom and gloom**, I trained a model with `alpha=1.0` for a while and then I reduced it to `0.5` for just 2 epochs ( I ran out of patience). Notice the rows `edge`, `silhoutte`, `contrast`, . (`imagent_shape_biased_net_4extra_conv_adam_lr_0.0003_alpha_0.5_2epochs_alpha_1.0_20_epochs_randaugs_128_256_batch.pth`)
 
 
                
